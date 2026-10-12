@@ -4,29 +4,54 @@ import java.net.*;
 import java.io.*;
 
 public class EmailSender {
-    /*
-     * Constructor opens Socket to host/port. If the Socket throws an exception
-     * during opening,
-     * the exception is not handled in the constructor.
-     */
-    public EmailSender(String host, int port) throws UnknownHostException, IOException {
 
+    private Socket socket;
+    private BufferedReader reader;
+    private PrintWriter writer;
+
+    public EmailSender(String host, int port) throws UnknownHostException, IOException {
+        socket = new Socket(host, port);
+        
+        reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+
+        writer = new PrintWriter(socket.getOutputStream(), true);
+        
+        reader.readLine();
     }
 
-    /*
-     * Sends email from an email address to an email address with some subject and
-     * text.
-     * If the Socket throws an exception during sending, the exception is not
-     * handled by this method.
-     */
     public void send(String from, String to, String subject, String text) throws IOException {
 
+        writer.println("HELO localhost");
+        reader.readLine();
+
+        writer.println("MAIL FROM:<" + from + ">");
+        reader.readLine();
+
+        writer.println("RCPT TO:<" + to + ">");
+        reader.readLine();
+
+        writer.println("DATA");
+        reader.readLine();
+
+        writer.println("Subject: " + subject);
+        writer.println();
+        writer.println(text);
+        
+        writer.println(".");
+        reader.readLine();
     }
 
-    /*
-     * Sends QUIT and closes the socket
-     */
     public void close() {
-
+        try {
+            if (writer != null) {
+                writer.println("QUIT");
+            }
+            if (socket != null && !socket.isClosed()) {
+                socket.close();
+            }
+        } catch (IOException e) {
+        
+        }
     }
+
 }

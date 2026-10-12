@@ -1,3 +1,5 @@
+Šimon Hrabina, pondělí 14:00-16:00
+
 # Úkol 1 - Email Sender
 
 [![UTB FAI Task](https://img.shields.io/badge/UTB_FAI-Task-yellow)](https://www.fai.utb.cz/)
